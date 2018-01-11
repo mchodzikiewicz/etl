@@ -149,6 +149,7 @@
     <ClInclude Include="..\..\src\message_types.h" />
     <ClInclude Include="..\..\src\message_router.h" />
     <ClInclude Include="..\..\src\message_router_generator.h" />
+    <ClInclude Include="..\..\src\multi_array.h" />
     <ClInclude Include="..\..\src\packet.h" />
     <ClInclude Include="..\..\src\profiles\arduino_arm.h" />
     <ClInclude Include="..\..\src\profiles\armv5.h" />
@@ -418,6 +419,7 @@
     <ClCompile Include="..\test_message_timer.cpp" />
     <ClCompile Include="..\test_multimap.cpp" />
     <ClCompile Include="..\test_multiset.cpp" />
+    <ClCompile Include="..\test_multi_array.cpp" />
     <ClCompile Include="..\test_murmur3.cpp" />
     <ClCompile Include="..\test_numeric.cpp" />
     <ClCompile Include="..\test_observer.cpp">
