@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\array_view.h" />
+    <ClInclude Include="..\..\src\array_wrapper.h" />
     <ClInclude Include="..\..\src\atomic.h" />
     <ClInclude Include="..\..\src\atomic\atomic_arm.h" />
     <ClInclude Include="..\..\src\atomic\atomic_gcc.h" />
@@ -149,7 +150,6 @@
     <ClInclude Include="..\..\src\message_types.h" />
     <ClInclude Include="..\..\src\message_router.h" />
     <ClInclude Include="..\..\src\message_router_generator.h" />
-    <ClInclude Include="..\..\src\multi_array.h" />
     <ClInclude Include="..\..\src\packet.h" />
     <ClInclude Include="..\..\src\profiles\arduino_arm.h" />
     <ClInclude Include="..\..\src\profiles\armv5.h" />
@@ -343,6 +343,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\test_array_view.cpp" />
+    <ClCompile Include="..\test_array_wrapper.cpp" />
     <ClCompile Include="..\test_binary.cpp" />
     <ClCompile Include="..\test_bitset.cpp" />
     <ClCompile Include="..\test_bloom_filter.cpp" />
@@ -419,7 +420,6 @@
     <ClCompile Include="..\test_message_timer.cpp" />
     <ClCompile Include="..\test_multimap.cpp" />
     <ClCompile Include="..\test_multiset.cpp" />
-    <ClCompile Include="..\test_multi_array.cpp" />
     <ClCompile Include="..\test_murmur3.cpp" />
     <ClCompile Include="..\test_numeric.cpp" />
     <ClCompile Include="..\test_observer.cpp">

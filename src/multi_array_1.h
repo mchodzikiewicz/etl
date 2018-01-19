@@ -51,10 +51,9 @@ namespace etl
   public:
 
     typedef T value_type;
-    typedef typename etl::array<etl::array<etl::array<etl::array<T, S3>, S2>, S1>, S0> type0;
-    typedef typename etl::array<etl::array<etl::array<T, S3>, S2>, S1> type1;
-    typedef typename etl::array<etl::array<T, S3>, S2> type2;
-    typedef typename etl::array<T, S3> type3;
+    typedef typename etl::multi_array<T, S1, S2, S3> type;
+    typedef typename type::type type2;
+    typedef typename type::type::type type3;
 
     enum
     {
@@ -65,17 +64,22 @@ namespace etl
       SIZE3 = S3
     };
 
-    type1& operator[](size_t i)
+    type& operator[](size_t i)
     {
       return data[i];
     }
 
-    const type1& operator[](size_t i) const
+    const type& operator[](size_t i) const
     {
       return data[i];
     }
 
-    static size_t size(size_t i = 0)
+    static size_t size()
+    {
+      return SIZE0;
+    }
+
+    static size_t size(size_t i)
     {
       switch (i)
       {
@@ -88,21 +92,28 @@ namespace etl
     }
 
     /// The number of dimensions.
-    static size_t dimensions(size_t i = 0)
+    static size_t dimensions()
+    {
+      return DIMENSIONS;
+    }
+
+    static size_t dimensions(size_t i)
     {
       switch (i)
       {
         case 0:  return DIMENSIONS;
-        case 1:  return DIMENSIONS - 1;
-        case 2:  return DIMENSIONS - 2;
-        case 3:  return DIMENSIONS - 3;
+        case 1:  return type::DIMENSIONS;
+        case 2:  return type2::DIMENSIONS;
+        case 3:  return type3::DIMENSIONS;
         default: return 0;
       }
     }
 
-  //private:
+  private:
 
-    type1 data;
+    etl::array<type, SIZE0> data;
+
+    static const size_t sizes[];
   };
 
   //***************************************************************************

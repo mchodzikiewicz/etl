@@ -293,6 +293,8 @@ namespace etl
   ///**************************************************************************
   template <typename T, const size_t ARRAY_SIZE>
   char(&array_size(T(&array)[ARRAY_SIZE]))[ARRAY_SIZE];
+
+  #define ETL_ARRAY_SIZE(x) (sizeof(etl::array_size(x)))
 }
 
 #endif

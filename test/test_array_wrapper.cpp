@@ -28,148 +28,190 @@ SOFTWARE.
 
 #include "UnitTest++.h"
 
-#include "multi_array.h"
+
+#include "array_wrapper.h"
 
 #include <algorithm>
 #include <iterator>
 
 #include "integral_limits.h"
+#include "container.h"
 
 namespace
 {
-  typedef etl::multi_array<int, 2> Data1;
-  typedef etl::multi_array<int, 2, 3> Data2;
-  typedef etl::multi_array<int, 2, 3, 4> Data3;
-  typedef etl::multi_array<int, 2, 3, 4, 5> Data4;
-  
-  Data1 data1 = { {1}, {2} };
+  int data5[]  = { 0, 1, 2, 3, 4 };
+  extern const int cdata5[] = { 5, 6, 7, 8, 9 };
+  int data10[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-  SUITE(test_array)
+  typedef etl::array_wrapper<int, ETL_ARRAY_SIZE(data5), data5>  Data5;
+  typedef etl::array_wrapper<const int, ETL_ARRAY_SIZE(cdata5), cdata5>  CData5;
+  typedef etl::array_wrapper<int, ETL_ARRAY_SIZE(data10), data10> Data10;
+  typedef etl::array_temp Temp;
+
+  int temp;
+
+  void Save(int i)
+  {
+    temp = i;
+  }
+
+  void Restore(int& i)
+  {
+    i = temp;
+  }
+
+  SUITE(test_array_wrapper)
   {
     //*************************************************************************
     TEST(test_constructor)
     {
-      Data4 data;
+      Data5 aw5;
 
-      CHECK_EQUAL(2, data.size());
-      CHECK_EQUAL(4, data.dimensions());
-
-      CHECK_EQUAL(2, data.SIZE0);
-      CHECK_EQUAL(3, data.SIZE1);
-      CHECK_EQUAL(4, data.SIZE2);
-      CHECK_EQUAL(5, data.SIZE3);
-      CHECK_EQUAL(4, data.DIMENSIONS);
-
-      CHECK_EQUAL(2, data.size(0));
-      CHECK_EQUAL(4, data.dimensions(0));
-
-      CHECK_EQUAL(3, data.size(1));
-      CHECK_EQUAL(3, data.dimensions(1));
-
-      CHECK_EQUAL(4, data.size(2));
-      CHECK_EQUAL(2, data.dimensions(2));
-
-      CHECK_EQUAL(5, data.size(3));
-      CHECK_EQUAL(1, data.dimensions(3));
+      CHECK_ARRAY_EQUAL(data5, aw5.data(), aw5.size());
     }
 
     //*************************************************************************
-    TEST(test_multi_array_view)
+    TEST(test_at)
     {
-      Data1 data1;
-      Data2 data2;
-      Data3 data3;
-      Data4 data4;
+      Data5 aw5;
 
-      etl::multi_array_view<Data1::value_type> mav1(data1);
-      etl::multi_array_view<Data2::value_type> mav2(data2);
-      etl::multi_array_view<Data3::value_type> mav3(data3);
-      etl::multi_array_view<Data4::value_type> mav4(data4);
+      CHECK_EQUAL(data5[2], aw5.at(2));
 
-      CHECK_EQUAL(1, mav1.dimensions());
-      CHECK_EQUAL(2, mav2.dimensions());
-      CHECK_EQUAL(3, mav3.dimensions());
-      CHECK_EQUAL(4, mav4.dimensions());
-    }
-         
-    //*************************************************************************
-    TEST(test_loop)
-    {
-      //Data4 data4;
-
-
+      Save(data5[2]);
+      aw5.at(2) = 100;
+      CHECK_EQUAL(100, data5[2]);
+      CHECK_EQUAL(100, aw5.at(2));
+      Restore(data5[2]);
     }
 
     //*************************************************************************
     TEST(test_at_const)
     {
+      const Data5 caw5a; // array_wrapper is const.
+      CData5 caw5b;      // array wrapped by array_wrapper is const.
+
+      CHECK_EQUAL(data5[2], caw5a.at(2));
+      CHECK_EQUAL(data5[2], caw5b.at(2));
+
+      // These lines should fail to compile.
+      // caw5a.at(2) = 100;
+      // caw5b.at(100) = 100;
     }
 
     //*************************************************************************
     TEST(test_index_operator)
     {
+      Data5 aw5;
+
+      CHECK_EQUAL(data5[2], aw5[2]);
+
+      Save(data5[2]);
+      aw5[2] = 100;
+      CHECK_EQUAL(100, data5[2]);
+      CHECK_EQUAL(100, aw5[2]);
+      Restore(data5[2]);
     }
 
     //*************************************************************************
     TEST(test_index_operator_const)
     {
+      const Data5 caw5a; // array_wrapper is const.
+      CData5 caw5b;      // array wrapped by array_wrapper is const.
+
+      CHECK_EQUAL(data5[2], caw5a[2]);
+      CHECK_EQUAL(data5[2], caw5b[2]);
+
+      // These lines should fail to compile.
+      // caw5a[2] = 100;
+      // caw5b[100] = 100;
     }
 
     //*************************************************************************
     TEST(test_front)
     {
+      Data5 aw5;
+      CHECK_EQUAL(0, Data5::FRONT);
+      CHECK_EQUAL(data5[Data5::FRONT], aw5.front());
     }
 
     //*************************************************************************
     TEST(test_front_const)
     {
+      const Data5 caw5 = Data5();
+      CHECK_EQUAL(data5[Data5::FRONT], caw5.front());
+
+      //CData5 caw5b;
+      //CHECK_EQUAL(0, Data5::FRONT);
+      //CHECK_EQUAL(data5[Data5::FRONT], caw5b.front());
     }
 
     //*************************************************************************
     TEST(test_back)
     {
+      Data5 aw5;
+      CHECK_EQUAL(Data5::SIZE - 1, Data5::BACK);
+      CHECK_EQUAL(data5[Data5::BACK], aw5.back());
     }
 
     //*************************************************************************
     TEST(test_back_const)
     {
-
+      const Data5 caw5 = Data5();
+      CHECK_EQUAL(data5[Data5::BACK], caw5.back());
     }
 
     //*************************************************************************
     TEST(test_data)
     {
+      Data5 aw5;
 
+      CHECK_EQUAL(data5, aw5.data());
     }
 
     //*************************************************************************
     TEST(test_data_const)
     {
+      const Data5 aw5;
 
+      CHECK_EQUAL(data5, aw5.data());
     }
 
     //*************************************************************************
     TEST(test_begin)
     {
+      Data5 aw5;
 
+      CHECK_EQUAL(0, Data5::BEGIN);
+      CHECK_EQUAL(data5, aw5.begin());
+    }
+
+    //*************************************************************************
+    TEST(test_begin_const)
+    {
+      const Data5 aw5;
+
+      CHECK_EQUAL(0, Data5::BEGIN);
+      CHECK_EQUAL(data5, aw5.begin());
+      CHECK_EQUAL(data5, aw5.cbegin());
     }
 
     //*************************************************************************
     TEST(test_end)
     {
+      Data5 aw5;
 
+      CHECK_EQUAL(5, Data5::END);
+      CHECK_EQUAL(&data5[Data5::END], aw5.end());
     }
 
     //*************************************************************************
-    TEST(test_cbegin)
+    TEST(test_end_const)
     {
+      const Data5 aw5;
 
-    }
-
-    //*************************************************************************
-    TEST(test_cend)
-    {
-
+      CHECK_EQUAL(5, Data5::END);
+      CHECK_EQUAL(&data5[Data5::END], aw5.end());
+      CHECK_EQUAL(&data5[Data5::END], aw5.cend());
     }
 
     //*************************************************************************

@@ -567,7 +567,7 @@
     <ClInclude Include="..\..\src\string_view.h">
       <Filter>ETL\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\multi_array.h">
+    <ClInclude Include="..\..\src\array_wrapper.h">
       <Filter>ETL\Containers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -950,7 +950,7 @@
     <ClCompile Include="..\test_string_view.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\test_multi_array.cpp">
+    <ClCompile Include="..\test_array_wrapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
