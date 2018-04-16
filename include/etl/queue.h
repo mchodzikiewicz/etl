@@ -47,6 +47,8 @@ SOFTWARE.
 #undef ETL_FILE
 #define ETL_FILE "13"
 
+#define ETL_QUEUE_CPP03_CODE 0
+
 //*****************************************************************************
 ///\defgroup queue queue
 /// A First-in / first-out queue with the capacity defined at compile time,
@@ -324,6 +326,7 @@ namespace etl
       return p_buffer[next];
     }
 
+#if !ETL_CPP11_SUPPORTED || ETL_QUEUE_CPP03_CODE
     //*************************************************************************
     /// Constructs a value in the queue 'in place'.
     /// If asserts or exceptions are enabled, throws an etl::queue_full if the queue if already full.
@@ -383,6 +386,20 @@ namespace etl
       ::new (&p_buffer[in]) T(value1, value2, value3, value4);
       base_t::add_in();
     }
+#else
+    //*************************************************************************
+    /// Emplace with variadic constructor parameters.
+    //*************************************************************************
+    template <typename... Args>
+    void emplace(Args&&... args)
+    {
+#if defined(ETL_CHECK_PUSH_POP)
+      ETL_ASSERT(!full(), ETL_ERROR(queue_full));
+#endif
+      ::new (&p_buffer[in]) T(std::forward<Args>(args)...);
+      base_t::add_in();
+    }
+#endif
 
     //*************************************************************************
     /// Clears the queue to the empty state.
