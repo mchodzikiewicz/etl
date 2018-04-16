@@ -34,6 +34,7 @@ SOFTWARE.
 #include <mutex>
 #include <atomic>
 #include <algorithm>
+#include <ostream>
 
 #include "queue_mpmc_mutex.h"
 
@@ -45,6 +46,34 @@ SOFTWARE.
 
 namespace
 {
+  struct Data
+  {
+    Data(int a, int b = 2, int c = 3, int d = 4)
+    {
+    }
+
+    Data()
+    {
+    }
+
+    int a;
+    int b;
+    int c;
+    int d;
+  };
+
+  bool operator ==(const Data& lhs, const Data& rhs)
+  {
+    return (lhs.a == rhs.a) && (lhs.b == rhs.b) && (lhs.c == rhs.c) && (lhs.d == rhs.d);
+  }
+
+  std::ostream& operator <<(std::ostream& os, const Data& data)
+  {
+    os << data.a << " " << data.b << " " << data.c << " " << data.d;
+
+    return os;
+  }
+
   SUITE(test_queue_mpmc_mutex)
   {
     //*************************************************************************
@@ -105,6 +134,57 @@ namespace
 
       CHECK(!queue.pop(i));
       CHECK(!queue.pop(i));
+    }
+
+    //*************************************************************************
+    TEST(test_size_emplace_pop)
+    {
+      etl::queue_mpmc_mutex<Data, 4> queue;
+
+      CHECK_EQUAL(0U, queue.size());
+
+      CHECK_EQUAL(4U, queue.available());
+      CHECK_EQUAL(0U, queue.size());
+
+      queue.emplace(1);
+      CHECK_EQUAL(1U, queue.size());
+      CHECK_EQUAL(3U, queue.available());
+
+      queue.emplace(1, 2);
+      CHECK_EQUAL(2U, queue.size());
+      CHECK_EQUAL(2U, queue.available());
+
+      queue.emplace(1, 2, 3);
+      CHECK_EQUAL(3U, queue.size());
+      CHECK_EQUAL(1U, queue.available());
+
+      queue.emplace(1, 2, 3, 4);
+      CHECK_EQUAL(4U, queue.size());
+      CHECK_EQUAL(0U, queue.available());
+
+      CHECK(!queue.emplace(1, 2, 3, 4));
+      CHECK(!queue.emplace(1, 2, 3, 4));
+
+      Data test;
+
+      CHECK(queue.pop(test));
+      CHECK_EQUAL(Data(1), test);
+      CHECK_EQUAL(3U, queue.size());
+
+      CHECK(queue.pop(test));
+      CHECK_EQUAL(Data(1, 2), test);
+      CHECK_EQUAL(2U, queue.size());
+
+      CHECK(queue.pop(test));
+      CHECK_EQUAL(Data(1, 2, 3), test);
+      CHECK_EQUAL(1U, queue.size());
+
+      CHECK(queue.pop(test));
+      CHECK_EQUAL(Data(1, 2, 3, 4), test);
+      CHECK_EQUAL(0U, queue.size());
+
+      CHECK(!queue.pop(test));
+      CHECK(!queue.pop(test));
     }
 
     //*************************************************************************
