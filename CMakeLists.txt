@@ -73,5 +73,5 @@ target_compile_definitions(etl
 
 if (BUILD_TESTS)
   enable_testing()
-  add_subdirectory(test) 
+  add_subdirectory(test)
 endif()

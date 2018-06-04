@@ -66,6 +66,15 @@ build/
 [Bb]in/
 [Oo]bj/
 
+
+#################
+## CLion
+#################
+
+##Ignore CLion project config files
+.idea
+cmake-build-*
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
@@ -236,3 +245,7 @@ pip-log.txt
 *.session
 *.tags
 *.db
+
+
+#Not sure if it should be ignored or not, maybe unittest-cpp should be submodule?
+unittest-cpp

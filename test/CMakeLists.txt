@@ -46,7 +46,7 @@ set(TEST_SOURCE_FILES
   test_enum_type.cpp
   test_error_handler.cpp
   test_exception.cpp
-  test_factory.cpp
+#  test_factory.cpp
   test_fixed_iterator.cpp
   test_flat_map.cpp
   test_flat_multimap.cpp
@@ -120,7 +120,7 @@ set(TEST_SOURCE_FILES
   test_xor_rotate_checksum.cpp
 
   # Compile the source level ecl_timer here as test has provided a ecl_user.h file
-  ${CMAKE_SOURCE_DIR}/src/c/ecl_timer.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/../src/c/ecl_timer.c
   )
 
 if (WIN32)
@@ -132,7 +132,7 @@ if (WIN32)
 endif()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU") 
-  list(APPEND TEST_SOURCE_FILES "test_atomic_gcc.cpp")
+#  list(APPEND TEST_SOURCE_FILES "test_atomic_gcc.cpp")
 endif()
 add_executable(etl_tests 
   ${TEST_SOURCE_FILES}

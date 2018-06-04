@@ -84,17 +84,17 @@ namespace etl
       return *this;
     }
 
-    inline debug_count& operator +=(int32_t n)
-    {
-      count += n;
-      return *this;
-    }
-
-    inline debug_count& operator -=(int32_t n)
-    {
-      count -= n;
-      return *this;
-    }
+//    inline debug_count& operator +=(int32_t n)
+//    {
+//      count += n;
+//      return *this;
+//    }
+//
+//    inline debug_count& operator -=(int32_t n)
+//    {
+//      count -= n;
+//      return *this;
+//    }
 
     inline debug_count& operator +=(size_t n)
     {
