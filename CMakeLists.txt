@@ -13,7 +13,7 @@ project(etl)
 set(ETL_PROFILE "DEFAULT" CACHE STRING "Defines what profile header to include.  See https://www.etlcpp.com/setup.html"
 )
 
-option(BUILD_TESTS "Build unit tests" ON)
+#option(BUILD_TESTS "Build unit tests" ON)
 
 
 # Note: this will not compile src/c/ecl_timer.c as that c file has a dependence
