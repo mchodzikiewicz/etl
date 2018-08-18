@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(etl_unit_tests)
 
+add_definitions(-DETL_DEBUG)
+
+
 if(NOT UnitTest++_FOUND)
   # Add unittest-cpp as an ExternalProject
   include(cmake/unit-test_external_project.cmake)
@@ -128,8 +131,10 @@ if (WIN32)
   ADD_DEFINITIONS(-D_UNICODE)
 endif()
 
+
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
   list(APPEND TEST_SOURCE_FILES "test_atomic_gcc_sync.cpp")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
 endif()
 add_executable(etl_tests
   ${TEST_SOURCE_FILES}
