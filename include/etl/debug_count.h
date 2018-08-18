@@ -68,7 +68,7 @@ namespace etl
 
     inline ~debug_count()
     {
-//      assert(count == 0);
+      assert(count == 0);
     }
 
     inline debug_count& operator ++()
