@@ -21,6 +21,20 @@ endif()
 include_directories(${UTPP_INCLUDE_DIRS})
 
 set(TEST_SOURCE_FILES
+        #FIXME: this is temporary, please help
+        ../src/binary.cpp
+        ../src/crc16.cpp
+        ../src/crc16_ccitt.cpp
+        ../src/crc16_kermit.cpp
+        ../src/crc32.cpp
+        ../src/crc64_ecma.cpp
+        ../src/crc8_ccitt.cpp
+        ../src/error_handler.cpp
+        ../src/pearson.cpp
+        ../src/random.cpp
+        ../src/private
+        ../src/private/pvoidvector.cpp
+        #FIXME: end of temp fix
   main.cpp
   murmurhash3.cpp
   test_algorithm.cpp
@@ -123,6 +137,38 @@ set(TEST_SOURCE_FILES
   ${PROJECT_SOURCE_DIR}/../src/c/ecl_timer.c
   )
 
+#FIXME: this is temporary, please help
+target_include_directories(etl
+        PUBLIC
+        include
+        include/etl/profiles
+        )
+
+if (${ETL_PROFILE} STREQUAL DEFAULT)
+    if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+        set(ETL_PROFILE "PROFILE_GCC_GENERIC")
+
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        set(ETL_PROFILE "PROFILE_MSVC")
+
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "ARMCC")
+        if (CXX_STANDARD EQUAL 11)
+            set(ETL_PROFILE "PROFILE_ARMV6")
+        else ()
+            set(ETL_PROFILE "PROFILE_ARMV5")
+        endif()
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "TI")
+        set(ETL_PROFILE "PROFILE_TICC")
+
+    else()
+        message(FATAL_ERROR "Can't generate default profile for compiler: ${CMAKE_CXX_COMPILER_ID}")
+    endif()
+endif()
+
+message(STATUS "Compiling with ETL profile set to: ${ETL_PROFILE}")
+#FIXME: end of temp fix
+
+
 if (WIN32)
   # test_error_handler.cpp uses windows APIs that assume the microsoft project
   # is setup for unicode support.  Note: This may have adverse effects on client
@@ -144,6 +190,13 @@ target_include_directories(etl_tests
   PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}
   )
+
+#FIXME: this is temporary, please help
+target_compile_definitions(etl_tests
+        PUBLIC
+        ${ETL_PROFILE}
+        )
+#FIXME: end of temp fix
 
 # Enable the 'make test' CMake target using the executable defined above
 add_test(etl_unit_tests etl_tests)
