@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(etl_unit_tests)
 
-# Bring in the UnitTest++ include directories and libraries
-find_package(UnitTest++)
-
 if(NOT UnitTest++_FOUND)
   # Add unittest-cpp as an ExternalProject
   include(cmake/unit-test_external_project.cmake)
